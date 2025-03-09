@@ -1,0 +1,24 @@
+using sysbus
+
+$name = "STM32F4"
+
+mach create $name
+
+# Load the STM32F407 SoC
+echo "Creating STM32F407 MCU"
+machine LoadPlatformDescription @platforms/cpus/stm32f4.repl
+
+# Load firmware
+echo "Loading firmware: STM32F407_BMP280_I2C1.elf"
+sysbus LoadELF "C:/Users/sneha/STM32CubeIDE/workspace_1.18.0/STM32F407_BMP280_I2C1/Debug/STM32F407_BMP280_I2C1.elf"
+
+# Attach the BMP280 sensor at I2C address 0x76
+echo "Adding BMP280 sensor on I2C1"
+sysbus AddI2CDevice BMP280 0x76
+
+# Enable semihosting
+echo "Enabling semihosting"
+machine EnablePlatformAdoptedSemihosting
+
+# Start execution
+start
